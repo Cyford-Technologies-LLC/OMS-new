@@ -3,8 +3,8 @@
 define('APPLICATION', 'Admin');
 
 // HTTP
-define('HTTP_SERVER', 'https://new.onlinemerchantstore.com/theadmin/');
-define('HTTP_CATALOG', 'https://new.onlinemerchantstore.com/');
+define('HTTP_SERVER', 'https://onlinemerchantstore.com/theadmin/');
+define('HTTP_CATALOG', 'https://onlinemerchantstore.com/');
 
 // DIR
 define('DIR_OPENCART', '/var/www/html/oms/');

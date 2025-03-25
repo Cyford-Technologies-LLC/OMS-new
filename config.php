@@ -3,7 +3,7 @@
 define('APPLICATION', 'Catalog');
 
 // HTTP
-define('HTTP_SERVER', 'https://new.onlinemerchantstore.com/');
+define('HTTP_SERVER', 'https://onlinemerchantstore.com/');
 
 // DIR
 define('DIR_OPENCART', '/var/www/html/oms/');

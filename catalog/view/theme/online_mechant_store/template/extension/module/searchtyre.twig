@@ -1,0 +1,157 @@
+<link rel="stylesheet" href="catalog/view/theme/default/stylesheet/tyre.css">
+<style>
+div.onlinestore-search {
+    width: 98%!important;
+    margin-left: 1%!important;
+    display: inline-block;
+}
+</style>
+<div  class="onlinestore-search">
+<h3>{{ heading_title }}</h3>
+<div id="buscador-neumaticos" class="onlinestore-search">
+	<div class="inline">
+		<label for="width">{{ text_tyre_width }}</label><br>
+		<select name="width" id="width" data-inline="true">
+			<option {{ (width) ? '' : 'selected' }}></option>
+                         {% for manufacturers in manufacturers %}
+			<option value="{{manufacturers.tyre_width}}" >{{manufacturers.tyre_width}}</option>
+                        {% endfor %}
+			
+		</select>
+	</div>
+	<div class="inline">
+		<label for="profile">{{ text_tyre_profile }}</label>
+		<br>
+		<select name="pofile" id="profile" data-inline="true">
+			<option {{ (profile) ? '' : 'selected' }}></option>
+                          {% for manufacturers in manufacturers %}
+			<option value="{{manufacturers.tyre_profile}}" {{ (profile and profile=='35') ? 'selected' }}>{{manufacturers.tyre_profile}}</option>
+                          {% endfor %}
+			
+		</select>
+	</div>
+	<span>R</span>
+
+	<div class="inline">
+		<label for="diameter">{{ text_wheel_size }}</label>
+		<br>
+		<select name="diameter" id="diameter">
+			<option {{ (diameter) ? '' : 'selected' }}></option>
+                         {% for manufacturers in manufacturers %}
+			<option value="{{manufacturers.tyre_diameter}}" {{ (diameter and diameter==12) ? 'selected' }}>{{manufacturers.tyre_diameter}}</option>
+                          {% endfor %}
+			
+		</select>
+	</div>
+
+	<div class="inline">
+		<label for="speed">{{ text_speed_rating }}</label>
+		<br>
+		<select name="speed" id="speed">
+			<option {{ (speed) ? '' : 'selected' }}></option>
+                        {% for manufacturers in manufacturers %}
+			<option value="{{manufacturers.tyre_speed}}" {{ (speed and speed=='K') ? 'selected' }}>{{manufacturers.tyre_speed}}</option>
+			{% endfor %}
+		</select>
+	</div>
+
+	<div class="inline">
+		<label for="manufacturer_id">{{ text_tyre_brand }}</label>
+		<br>
+		<select name="manufacturer_id" id="manufacturer_id" data-inline="true">
+			<option {{ (brand) ? '' : 'selected' }}></option>
+			{% for manufacturers in manufacturers %}
+				
+				    <option value="{{ manufacturers.manufacturer_id }}" selected>{{ manufacturers.name }}</option>
+				{% endfor %}
+			
+		</select>
+	</div>
+
+	<div class="inline">
+		<label for="filter_type">{{ text_tyre_type }}</label>
+		<br>
+		<select name="filter_type" id="filter_type" class="form-control">
+						<option value="A" selected="">All Seasons</option>
+						<option value="S">Summer Tyres</option>
+						<option value="W">Winter Tyres</option>
+					</select>
+	</div>
+
+	<div class="inline">
+		<a onclick="contentSearchTyre();" class="btn btn-primary btn-lg btn-block">{{ button_search }}</a>
+	</div>
+</div>
+</div>
+
+<script language="JavaScript" type="text/JavaScript"><!--
+   
+//--></script>
+<script type="text/javascript"><!--
+function contentSearchTyre() {
+
+        
+             
+
+	url = 'index.php?route=product/searchtyre';
+
+	
+	var filter_type = $( "#filter_type option:selected" ).text();
+
+	if (filter_type) {
+		url += '&filter_type=' + encodeURIComponent(width);
+	}else{
+           alert("select Tire Type"); 
+           return true;
+          }
+	var width = $( "#width option:selected" ).text();
+
+	if (width) {
+		url += '&width=' + encodeURIComponent(width);
+	}else{
+         alert("select Tire Width"); 
+           return true;
+        }
+	
+	var profile = $( "#profile option:selected" ).text();
+	
+	if (profile) {
+		url += '&profile=' + encodeURIComponent(profile);
+	}else{
+         alert("select Tire Profile"); 
+           return true;
+        }
+	
+	var diameter = $( "#diameter option:selected" ).text();
+	
+	if (diameter) {
+		url += '&diameter=' + encodeURIComponent(diameter);
+	}else{
+         alert("select Tire Diameter"); 
+           return true;
+        }
+	
+	var speed = $('select[name="speed"]').val()
+	
+	if (speed) {
+		url += '&speed=' + encodeURIComponent(speed.substr(0,1));
+	}else{
+         alert("select Tire Speed"); 
+           return true;
+        }
+	
+	var manufacturer_id = $('select[name="manufacturer_id"]').val()
+	
+	if (manufacturer_id) {
+		url += '&manufacturer_id=' + encodeURIComponent(manufacturer_id);
+	}else{
+         alert("select Tire Brand"); 
+           return true;
+        }
+
+
+
+	location = url;
+}
+//--></script>
+ 

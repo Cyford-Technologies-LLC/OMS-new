@@ -1,0 +1,622 @@
+<div class="wk_hidden_view" onclick= "module_chat_window.showWindow();"><img src="{{ chat_logo }}" /></div>
+<div class="instance_window ui-widget-content" id="draggable">
+<style type="text/css">
+    .modal-backdrop{
+        z-index: 98 !important;
+    }
+    .wk_user_name .wk_user_status{
+        background-color:{{ cust_details['chat_color'] }};
+    }
+    .support_name .wk_seller_status{
+        background-color:{{ wk_seller['status_color'] }};
+        border-radius: 50%;
+        height: 10px;
+        position: absolute;
+        right: -12px;
+        top: 7px;
+        width: 10px;
+    }
+    .instance_header{
+        background: {{ wk_header_color }}
+    }
+    {% if loggin is defined and loggin and chat_entry  %}
+    .instance_body{
+        {% if use_backgroundImage is defined and use_backgroundImage %}
+            background: url("{{ wk_background_image }}");
+        {% else %}
+            background: {{ wk_background_image }};
+        {% endif %}
+    }
+    {% endif %}
+    .instance_window{
+        left: {{ move_left }} !important;
+        overflow: hidden;
+    }
+    .wk_chat_content .wk_other_message,.wk_chat_content .wk_self_message, .support_name, .instance_header, .wk_user_name_info .wk_user_name, .support_name .wk_support_name, .wk_loggin_setting_area .list-group-item, .wk_msgdetails .wk_userName, .wk_msgdetails .wk_userMsg, .wk_msgdetails .wk_userEmail{
+        font-family: {{ font_style }}
+    }
+    .wk_chat_content .wk_other_message,.wk_chat_content .wk_self_message, .wk_msgdetails .wk_userName, .wk_msgdetails .wk_userMsg, .wk_msgdetails .wk_userEmail{
+        font-style: {% if (font_weight['italic']) %} {{'italic'}} {% endif %};
+        font-weight: {% if (font_weight['bold']) %} {{'bold'}} {% endif %};
+    }
+    .wk_chat_content .wk_self_message, .wk_self_message .wk_self_message_point, .wk_chat_content .wk_other_message, .wk_other_message .wk_other_message_point {
+        background-color: {% if (chat_back_style is defined and chat_back_style == 'plain') %} transparent {% endif %};
+    }
+    .wk_self_msg_area .wk_self_message .msg{
+        color: {{ customerFont_status }};
+    }
+    .wk_other_msg_area .wk_other_message .msg{
+        color: {{ sellerFont_status }};
+    }
+    .wk_chat_history .em{
+        font-size: 2em;
+    }
+</style>
+
+    <div class="instance_header" id="{{ wk_header_color }}" data-product-id="{{ product_id }}">
+        <div class="header_logo"><img src="{{ chat_logo }}" /></div>
+        <div class="support_name" id="{% if (wk_seller['customer_id'] is defined) %} {{ wk_seller['customer_id'] }} {% endif %}" data-unique-id="{% if (wk_seller['customer_unique_id'] is defined) %} {{ wk_seller['customer_unique_id'] }} {% endif %}" data-email="{% if (wk_seller['email'] is defined) %} {{ wk_seller['email'] }} {% endif %}" data-name="{{ (wk_seller['firstname']|capitalize)~' '~(wk_seller['lastname']|capitalize) }}">{{ (wk_seller['firstname']|capitalize)~' '~(wk_seller['lastname']|capitalize) }}
+            <span class="wk_seller_status"></span>
+            <div class="wk_support_name">
+                {{ config_timeline }}
+            </div>
+        </div>
+        <div class="header_close">
+            {% if (server_status is defined and not server_status and not chat_entry_not_found) %}
+            <span class="wk_instance_history">
+                <div class="wk_chat_history_options list-group">
+                    <span class="status_point"></span>
+                    <div class="list-group-item chathistory" id="1">{{ text_lasthours }}</div>
+                    <div class="list-group-item chathistory" id="2">{{ text_lastdays }}</div>
+                    <div class="list-group-item chathistory" id="3">{{ text_forever }}</div>
+                </div>
+            </span>
+            {% endif %}
+            <span class="wk_instance_minimize"></span>
+            <span class="wk_instance_maximize hide" onclick= "module_chat_window.Lange();"></span>
+
+            <span class="wk_instance_close" style="visibility:{% if (window_position is defined and window_position == 'left') %} {{ 'hidden' }} {% endif %}" onclick= "module_chat_window.Close();"></span>
+
+        </div>
+    </div>
+    <div class="instance_body">
+        {% if (server_status is defined and not server_status) %}
+            {% if (loggin is defined and not loggin) %}    
+    <div class="instance_body_inner">
+        <div class="wk_login_reg">
+            <ul class="nav nav-tabs instance_ul_tab">
+                <li class="active"><a data-toggle="tab" href="#tab-login">{{ text_loggin }}</a><span class="wk_point"></span></li>
+                <li><a data-toggle="tab" href="#tab-register">{{ text_registration }}</a><span class="wk_point"></span></li>
+            </ul>
+            <div class="tab-content">
+
+                <div id="tab-login" class="tab-pane active">
+                    <div class="form-horizontal">
+                        <div class="login_content">
+                            <div class="form-group col-sm-12 field_content">
+                                    <label class="control-label wk_label_field">
+                                        <span class="login_email_address"></span>
+                                        <div class="login_text required">{{ text_email_address }}<span class="chat_required"> *</span></div>
+                                    </label>
+                                <div class="chat_textbox">
+                                    <input type="text" name="user_email" value="{% if (user_email is defined and user_email) %} {{ user_email }} {% else %} {{ '' }}{% endif %}" placeholder="{{ entry_enter_email }}"  class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                <label class="control-label wk_label_field">
+                                    <span class="login_password"></span>
+                                    <div class="login_text required">{{ text_password }}<span class="chat_required"> *</span></div>
+                                </label>
+                                <div class="chat_textbox">
+                                    <input type="password" name="user_password" value="{% if (user_password is defined and user_password) %} {{ user_password }} {% endif %}" placeholder="{{ entry_password }}"  class="form-control"/>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                    <label class="control-label wk_label_field">
+                                        <span class="login_message"></span>
+                                        <div class="login_text required">{{ text_message }}</div>
+                                    </label>
+
+                                <div class="chat_textbox">
+                                    <textarea rows="2" cols="10" class="form-control" data-emojiable="true" name="user_message_login" placeholder="{{ entry_message }}">{% if (user_message_login is defined and user_message_login) %} {{ user_message_login }} {% endif %}</textarea>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                <button class="btn wk_submit_btn" type="sumbit" name="loggin_check" onclick="loggin_registration.wk_login();">{{ text_begin_chat }}</button>
+
+                            </div>
+
+                        </div>
+                    </div>
+                </div><!--tab login-->
+
+                <div id="tab-register" class="tab-pane">
+                     <div class="form-horizontal">
+                        <div class="login_content">
+                            <div class="form-group col-sm-12 field_content">
+                                    <label class="control-label wk_label_field" for="input-reg-name">
+                                        <span class="login_user"></span>
+                                        <div class="login_text">{{ text_name }}<span class="chat_required"> *</span></div>
+                                    </label>
+                                <div class="chat_textbox">
+                                    <input type="text" name="registration_user_name" id="input-reg-name" value="{% if (registration_user_name is defined and registration_user_name) %} {{ registration_user_name }} {% endif %}" placeholder="{{ entry_username }}" class="form-control" required="required" />
+
+                                      <div class="text-danger hide"></div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                <label class="control-label wk_label_field" for="input-reg-email">
+                                    <span class="login_email_address"></span>
+                                    <div class="login_text required">{{ text_email_address }}<span class="chat_required"> *</span></div>
+                                </label>
+                                <div class="chat_textbox">
+                                    <input type="text" name="user_email_address" id="input-reg-email" value="{% if (user_email_address is defined and user_email_address) %} {{ user_email_address }} {% endif %}" placeholder="{{ entry_enter_email }}"  class="form-control"/>
+
+                                      <div class="text-danger hide"></div>
+
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                    <label class="control-label wk_label_field" for="input-message">
+                                        <span class="login_message"></span>
+                                        <div class="login_text required">{{ text_message }}</div>
+                                    </label>
+
+                                <div class="chat_textbox">
+                                    <textarea rows="2" cols="10" data-emojiable="true" class="form-control" id="input-message" name="user_registration_message" placeholder="{{ entry_message }}">{% if (user_registration_message is defined and user_registration_message) %} {{ user_registration_message }} {% endif %}</textarea>
+                                    <div class="text-danger hide"></div>
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                <button class="btn wk_submit_btn" type="button" onclick="loggin_registration.wk_registration();">{{ text_begin_chat }}</button>
+                            </div>
+                        </div>
+                    </div>
+                </div><!--tab register-->
+                </div><!--tab content-->
+            </div><!--Login_reg-->
+
+            <div class="wk_loading_content hide">
+                <div class="wk_loading_user_name">
+                    <span class="wk_loading_howdy">{{ text_howdy }}</span>
+                    <span class="wk_loading_name">{% if (cust_details['client_name'] is defined and cust_details['client_name']) %} {{ cust_details['client_name'] }} {% endif %}</span>
+                </div>
+                <div class="wk_waiting_logo">
+                    <span class="wk_waitingtime_logo"></span>
+                </div>
+                <div class="wk_waiting_loading">
+                    <span class="wk_loading_howdy">{{ text_loading }}</span>
+                </div>
+                <div class="wk_loading_msgbox">
+                    {{ wk_waiting_message }}
+                </div>
+                <div class="wk_waiting_mailus">
+                    {{ wk_waiting_mail }}
+                    <a href="mailto:{{ wk_seller['email'] }}" class="wk_waiting_mail">{{ wk_waiting_mailus }}</a>
+                </div>
+            </div><!--sandclock-->
+
+        </div><!--instance_body_inner-->
+        </div>
+    {% elseif (loggin is defined and not chat_entry and not chat_entry_not_found) %}
+         <div class="user_LoginChat_area">
+            <div class="wk_report_manager_areaStartChat">
+                <div class="wk_seller_interestStartChat">
+                    <div class="wk_int_aboutManagerStartChat">{{ text_startChat }}</div>
+                    <div class="wk_int_descriptionStartChat">
+
+                        <textarea rows="7" name="senderMsg" style="width:100%;"></textarea>
+                    </div>
+                    <div class="form-group col-sm-12 field_content">
+                        <input type="hidden" name="receiver_id" value="{% if (cust_details['receiver_unique_id'] is defined and cust_details['receiver_unique_id']) %}{{ cust_details['receiver_unique_id'] }}{% endif %}" data-customer-id="{% if (cust_details['receiver_id'] is defined and cust_details['receiver_id']) %}{{ cust_details['receiver_id'] }}{% endif %}" data-attr-name="{{ cust_details['receiver_name'] }}"/>
+                        <input type="hidden" name="sender_id" value="{% if (cust_details['customer_id'] is defined and cust_details['customer_id']) %}{{ cust_details['customer_id'] }}{% endif %}" data-attr-name="{{ cust_details['firstname']~' '~cust_details['lastname'] }}"/>
+                        <button onclick="loggin_registration.startChat()" type="button" class="btn wk_submit_btn">{{ text_start }}</button>
+                    </div>
+                </div>
+            </div>
+         </div>
+    {% elseif ((loggin is defined and not chat_entry and chat_entry_not_found) or (loggin is defined and chat_entry and chat_entry_not_found) ) %}
+         <div class="alert alert-danger">{{ text_block_message }}</div>
+    {% else %}
+        <div class="user_LoginChat_area">
+        <script id="customerChatContent" type="text/x-handlebars-template">
+            <div class="wk_chat_area">
+            <div class="user_option_area">
+                <div class="loggin_user_info">
+                    {% if show_avatar is defined and show_avatar %}
+                        <span class="user_login_logo" style="background-image: url({% if (cust_details['logo'] is defined and cust_details['logo']) %} {{ cust_details['logo'] }} {% endif %})" ></span>
+                    {% else %}
+                        <span class="user_login_logo"></span>
+                    {% endif %}
+                    <div class="wk_user_name_info">
+                        <div class="wk_user_name">
+                            {% verbatim %}
+                                {{#if customer_name}}
+                                    {{customer_name}}
+                                {{/if}}
+                            {% endverbatim %}
+                        <span class="wk_user_status"></span></div>
+                        <div class="wk_user_email">{% verbatim %}{{customer_email}}{% endverbatim %}</div>
+                </div>
+                <div class="wk_loggin_setting_area">
+                    <span class="wk_chat_sound" style="visibility: {% if (sound_status) %} {{ 'visible' }} {% else %} {{ 'hidden' }} {% endif %}" >
+                        <audio controls="controls" class="wk_sound_play hide" id="myAudio">
+                            <source src="{% if (notifyMsg is defined) %} {{ notifyMsg }} {% endif %}" type="audio/ogg">
+                        </audio>
+                    </span>
+
+                    <span class="wk_chat_setting">
+                        <div class="wk_chat_setting_options list-group"><span class="setting_point"></span>
+                            <div class="list-group-item" onClick="loggin_registration.download_conversation('{{ cust_details['receiver_id'] }}')" id="download_conversation" >{{ text_email_transcript }}</div>
+                            <div class="list-group-item" id="wk_report_manager">{{ text_report_manager }}</div>
+                             <div class="list-group-item" id="wk_profile_setting" data="{{ cust_details['customer_id'] }}" data-toggle="modal" data-target="#wk_setting_profile">{{ text_profile_setting }}</div>
+                            <div class="list-group-item" id="wk_end_chat" data="{{ cust_details['customer_id'] }}" onclick="loggin_registration.updateOffline(this);">{{ text_end_chat }}</div>
+                        </div>
+                    </span>
+                    <span class="wk_chat_status">
+                        <div class="wk_chat_status_options list-group"><span class="status_point"></span>
+                            <div class="list-group-item chatStatus" id="1">{{ text_online }}<span class="online_status"></span></div>
+                            <div class="list-group-item chatStatus" id="2">{{ text_busy }}<span class="busy_status"></span></div>
+                            <div class="list-group-item chatStatus" id="3">{{ text_offline }}<span class="idle_status"></span></div>
+                        </div>
+                    </span>
+                    <span class="wk_back_to_chat"></span>
+                </div>
+            </div>
+            <div class="wk_chat_content">
+                    {% verbatim %}
+                <div class="wk_all_chat">
+                    <div class="wk_chat_history" id="wk_chat_history_{{customer_unique_id}}">
+                    
+                    {{> loadChatHistory}}
+                    </div>
+                    {% endverbatim %}
+                    <div class="file-name" style="display: none">
+                        <div class="name"></div>
+                        <a href="javascript:clearAttachment('upload_file')">X</a>
+                    </div>    
+                    <div class="wk_enter_chat">
+                        {% verbatim %}
+                        <input type="hidden" class="sender_id" id="{{customer_name}}" name="sender" value="{{customer_unique_id}}" data-customer-id = "{{customer_id}}" data-customer-email = "{{customer_email}}" />
+                        {% endverbatim %}
+
+                       <input type="hidden" name="name_email" id="{% if (name_email['email'] is defined  and name_email['email']) %} {% verbatim %} {{option_email}} {% endverbatim %} {% endif %}" value="{% if (name_email['name'] is defined  and name_email['name']) %} {% verbatim %} {{customer_name}}
+                       {% endverbatim %} {% endif %}" />
+                       {% verbatim %}
+                        <input type="hidden" class="receiver_id" id="{{receiver_name}}" name="receiver" value="{{receiver_unique_id}}" data-receiver-id = "{{receiver_id}}" />
+
+                        <input type="hidden" id="notification_logo" name="notify_logo" value="{{notify_logo}}"  />
+                        {% endverbatim %}
+                        <input type="hidden" name="sound_notification" value="{% if (sound_status is defined and sound_status) %} {{ sound_status }} {% endif %}" />
+                        <span class="file-upload">
+                            <button id="upload-file"><i class="fa fa-paperclip"></i></button>
+                            <input type="file" name="upload_file" style="display: none" onchange="displayImage(this);">
+                        </span>    
+                        <textarea class="form-control type_message" data-emojiable="true" name="message" value="" placeholder="Type your message..."></textarea>
+                        {% verbatim %}
+                        <span class="wk_send_chat hide" id="{{customer_unique_id}}"></span>
+                        {% endverbatim %}
+
+                    </div>
+                </div><!--wk_all_chat-->
+                <div class="wk_report_manager_area">
+                    <div class="wk_rating_star">
+                        <div class="wk_star_range">
+                        {% set i = 1 %}{% for i in i..5 %}
+                            {% if (feedback_total|round < i) %}
+                              <span class="fa fa-stack"><i class="fa fa-star-o fa-stack-2x"></i></span>
+                            {% else %}
+                              <span class="fa fa-stack"><i class="fa fa-star fa-stack-2x"></i><i class="fa fa-star-o fa-stack-2x"></i></span>
+                            {% endif %}
+                        {% endfor %}
+                        </div>
+                        <div class="wk_rating">
+                            <span><b>{{feedback_total|round}}{{ text_rating }} </b></span>
+                        </div>
+                    </div>
+                    <div class="wk_seller_interest">
+                            <div class="wk_int_aboutManager">{{ text_reportmanager }}</div>
+                            <div class="wk_int_description">
+                                <textarea name="reportTo_Manager" style="width: 80%;height:130px;" ></textarea>
+                            </div>
+                            <div class="form-group col-sm-12 field_content">
+                                <button class="btn wk_submit_btn" type="button" onclick="loggin_registration.reportToManager();">{{ text_send_report }}</button>
+                            </div>
+                    </div>
+
+                </div>
+            </div>
+            </div><!--wk_chat_area-->
+        </div>
+        </script>
+            <script id="wk_customerChatHistory" type="text/x-handlebars-template">
+                {% verbatim %}
+                {{#each chatHistory}}
+                    {{#if_eq sender_unique_id current_customer_id}}
+                            <div class="wk_self_msg_area">
+                                <span class="wk_self_image"></span>
+                                <div class="wk_self_message"><span class="wk_self_message_point"></span><div class="msg">
+                                    {{{message}}}
+                                    {{#if attachment}}
+                                        <p><a href="javascript:downloadAttachment('{{id}}','{{sender_unique_id}}','{{receiver_unique_id}}')">{{{attachment}}}</a></p>
+                                    {{/if}}
+                                </div><div class="wk_timeShow">{{date}}</div></div>
+                            </div>
+                       {{else}}
+                            <div class="wk_other_msg_area">
+                                <span class="wk_other_image"></span>
+                                <div class="wk_other_message"><span class="wk_other_message_point"></span><div class="msg">
+                                    {{{message}}}
+                                    {{#if attachment}}
+                                        <p><a href="javascript:downloadAttachment('{{id}}','{{sender_unique_id}}','{{receiver_unique_id}}')">{{{attachment}}}</a></p>
+                                    {{/if}}
+                                </div><div class="wk_timeShow">{{date}}</div></div>
+                            </div>
+                    {{/if_eq}}
+                {{/each}}
+                {% endverbatim %}
+            </script>
+            <script id="wk_customerNoHistory" type="text/x-handlebars-template">
+            {% verbatim %}
+            {{#each chatHistory}}
+                <div class="alert alert-danger text-center">{{{message}}}</div>
+            {{/each}}
+            {% endverbatim %}
+            </script>
+
+        </div>
+         <div class="modal fade modal-primary" id="wk_setting_profile" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-sm">
+                        <div class="modal-content">
+                         <div class="modal-header information">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="modal-title">{{ text_profile_setting }}</h4>
+                          </div>
+                        <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <div class="thumbnail" style="border:none;width:110px;height:100px;overflow:hidden;margin:auto;">
+                                    <input type="hidden" name="customer_unique_id" value="{{ cust_details['customer_unique_id'] }}">
+
+                                    <input type="file" name="profile_image" value="" id="1stimg" class="hide" accept="image/*" class="form-control"/>
+                                    <img src="{{ cust_details['thumb'] }}" class="img-circle" id="change_profile" />
+                                    <input type="hidden" name="profile_image" value="" class="pic_image form-control"/>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                {% if (remove_profile is defined and remove_profile) %}
+                                    <button type="button" id="remove_profile" data-profileimage="{{ remove_profile }}" class="btn btn-danger pull-left">{{ text_remove }}</button>
+                                {% endif %}
+                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ text_close }}</button>
+                                <button type="submit" class="btn btn-success">{{ text_upload }}</button>
+                              </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal modal-primary bs-example-modal-sm" id="wk_modelEmoji" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" style="width:290px;">
+                        <div class="modal-content">
+                             <div class="modal-header information">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                <h4 class="modal-title">Emoji</h4>
+                              </div>
+                        <form id="uploadimage" action="" method="post" enctype="multipart/form-data">
+                            <div class="modal-body">
+                                <ul class="nav nav-tabs">
+                                    <li class="active"><a data-toggle="tab" href="#tab-smiley"><i class="em em-blush"></i></a></li>
+                                    <li><a data-toggle="tab" href="#tab-eat"><i class="em em-coffee"></i></a></li>
+                                    <li><a data-toggle="tab" href="#tab-hand"><i class="em em---1"></i></a></li>
+                                </ul>
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tab-smiley">
+                                        <div>
+                                            {% for smiley_value in emoji_tab_smile %}
+                                                <span class="wk_sym"><i class="em em-{{ smiley_value }}"></i></span>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tab-eat">
+                                         <div>
+                                            {% for eat_value in emoji_tab_eat %}
+                                                <span class="wk_sym"><i class="em em-{{ eat_value }}"></i></span>
+                                            {% endfor %} 
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tab-hand">
+                                         <div>
+                                            {% for hand_value in emoji_tab_hand %}
+                                                <span class="wk_sym"><i class="em em-{{ hand_value }}"></i></span>
+                                            {% endfor %} 
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-danger">{{server_status}}</div>
+        {% endif %}            
+    </div><!--instance_window-->
+</div>
+<script type="text/javascript" src="catalog/view/javascript/store_chat/handlebars.js"></script>
+<link rel="stylesheet" href="catalog/view/javascript/store_chat/css/emoji.css">
+<script src="catalog/view/javascript/store_chat/js/config.js"></script>
+<script src="catalog/view/javascript/store_chat/js/util.js"></script>
+<script src="catalog/view/javascript/store_chat/js/jquery.emojiarea.js"></script>
+<script src="catalog/view/javascript/store_chat/js/emoji-picker.js"></script>
+
+<script type="text/javascript">
+
+    $(function() {
+
+        window.emojiPicker = new EmojiPicker({
+            emojiable_selector: '[data-emojiable=true]',
+            assetsPath: 'catalog/view/javascript/store_chat/img/',
+            popupButtonClasses: 'fa fa-smile-o'
+        });
+        window.emojiPicker.discover();
+    
+        waitForElPoplayOrder($('.type_message'), function () {   
+                // Initializes and creates emoji set from sprite sheet
+                window.emojiPicker = new EmojiPicker({
+                emojiable_selector: '[data-emojiable=true]',
+                assetsPath: 'catalog/view/javascript/store_chat/img/',
+                popupButtonClasses: 'fa fa-smile-o'
+          });
+          window.emojiPicker.discover();                   
+        });
+      });
+      
+      var waitForElPoplayOrder = function (selector, callback) {
+        if ($('.type_message').length) {
+            callback();
+        } else {
+            setTimeout(function () {
+                waitForElPoplayOrder(selector, callback);
+            }, 100);
+        }
+    };    
+    {% if (loggin is defined and cust_details['customer_unique_id'] is defined and chat_entry and not chat_entry_not_found) %}
+    $(document).ready(function(){
+        var x = new Date();
+        var currentTimeZoneOffsetInMins = x.getTimezoneOffset();
+        var customer_unique_id = '{{ cust_details['customer_unique_id'] }}';
+        var receiver_unique_id = '{{ cust_details['receiver_unique_id'] }}';
+        var historyTime = '0';
+                $.ajax({
+                    url : 'index.php?route=extension/module/store_chat/getClientHistory',
+                    data: 'customer_unique_id=' + customer_unique_id +'&historyTime=' + historyTime+'&timeOffset=' +currentTimeZoneOffsetInMins + '&receiver_unique_id=' + receiver_unique_id,
+                    datatype: 'json',
+                    type: 'POST',
+                    beforeSend: function(){
+                         var chatHistory = '';
+                        $("#wk_chat_history_"+customer_unique_id).children().remove();
+                    },
+                    success : function(json){
+                        var data = JSON.parse(json);
+                        if(data.success){
+                            $(data.success).each(function(key, val){
+                                val['current_customer_id'] = customer_unique_id;
+                            })
+                            chatHistory = data.success;
+                            var emojiPicker = new EmojiPicker({
+                                emojiable_selector: '[data-emojiable=true]',
+                                assetsPath: 'catalog/view/javascript/store_chat/img/',
+                                popupButtonClasses: 'fa fa-smile-o'
+                            });
+        
+                            if(chatHistory.length) {
+                                $.each(chatHistory,function(i,v) {
+                                    if(typeof chatHistory[i]['message'] != "undefined")
+                                    chatHistory[i]['message']= emojiPicker.colonToImage(v.message);
+                                });
+                            }
+                        }else{
+                            chatHistory = {message:'No Chat History'};
+                            $("#wk_chat_history_"+customer_unique_id).children().remove();
+                        }
+
+                        setTimeout(function(){
+
+                            var emojiPicker = new EmojiPicker();
+                            emojiPicker.appendUnicodeAsImageToElement(html);
+
+                            var all_details = {notify_logo: '{{ wk_largeLogo }}',receiver_id: '{{ cust_details['receiver_id'] }}', receiver_unique_id: '{{ cust_details['receiver_unique_id'] }}',receiver_name: '{{ cust_details['receiver_name'] }}', customer_id: '{{ cust_details['customer_id'] }}',customer_unique_id: '{{ cust_details['customer_unique_id'] }}',customer_name: '{{ cust_details['firstname']~' '~cust_details['lastname'] }}', option_email : '{{ cust_details['email'] }}',customer_email : '{{ cust_details['email'] }}',chatHistory: chatHistory};
+                            var chatUser_temp = $("#customerChatContent").html();
+                            var template = Handlebars.compile(chatUser_temp);
+
+                                if(data.success[0].sender_unique_id){
+                                    Handlebars.registerPartial("loadChatHistory", $("#wk_customerChatHistory").html());
+                                    var html = template(all_details);
+                                }else{
+                                     Handlebars.registerPartial("loadChatHistory", $("#wk_customerNoHistory").html());
+                                     var html = template(all_details);
+                                }
+                                $('.instance_body').find('.user_LoginChat_area').append(html);
+                        },500);
+
+                        Handlebars.registerHelper('if_eq', function(a, b, opts) {
+                            if(a == b){
+                                return opts.fn(this);
+                            }else{
+                                return opts.inverse(this);
+                            }
+                        });
+
+                    }
+
+                })
+
+    });
+    {% endif %}
+
+    {% if (loggin is defined and loggin and chat_entry) %}
+        $(document).ready(function(){
+            $(".instance_window .instance_body").attr("style","padding: 0px" );
+            $(".header_close").find(".wk_instance_history").css("visibility","visible");
+        })
+    {% endif %}
+
+    {% if wk_buttonText is defined and wk_buttonText and loggin is defined and not loggin %}
+    $('body button[name=\'loggin_check\']').text('{{ wk_buttonText }}');
+    {% endif %}
+
+    $('#change_profile').on('click',function(){
+      $(this).prev().trigger('click');
+    })
+
+    $(function() {
+       $("#wk_setting_profile").on("change","input[type='file']", function()
+       {
+        $.this = this;
+           var files = !!this.files ? this.files : [];
+           if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+
+           if (/^image/.test( files[0].type)){ // only image file
+               var reader = new FileReader(); // instance of the FileReader
+               reader.readAsDataURL(files[0]); // read the local file
+
+               reader.onloadend = function(){ // set image to display only
+                   src = this.result;
+                   $($.this).next('#change_profile').show('fast').attr('src',src);
+                   $($.this).parent().find('.pic_image').show('fast').attr('id','select_image');
+               }
+           }
+       });
+    });
+
+    $(document).on('submit', '#uploadimage', function(e){
+        e.preventDefault();
+        var get_Id = $('.instance_window').find('.pic_image').attr('id');
+        $('#uploadimage .modal-body').find('.alert').remove();
+            if(typeof get_Id !== 'undefined'){
+                $.ajax({
+                    url : 'index.php?route=extension/module/store_chat/upload_image',
+                    data: new FormData(this),
+                    datatype: 'json',
+                    type: 'POST',
+                    contentType: false,
+                    cache: false,
+                    processData:false,
+                    success: function(json){
+                        data = JSON.parse(json);
+                        if(data['success']){
+                            $('#uploadimage .modal-body').prepend("<div class=\"alert alert-success\">"+ data['success'] +"</div> ");
+                            setTimeout(function(){
+                                location.reload();
+                            }, 2000);
+                        }
+                        if(data['error']){
+                            $('#uploadimage .modal-body').prepend("<div class=\"alert alert-danger\">"+ data['error'] +"</div> ");
+                        }
+                    },
+                })
+            }else{
+                $('#uploadimage .modal-body').prepend("<div class=\"alert alert-danger\"> Warning: You have to select image first!</div> ");
+            }
+    })
+  </script>

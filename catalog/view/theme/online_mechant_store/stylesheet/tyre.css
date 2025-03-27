@@ -1,0 +1,85 @@
+/*================ BUSCADOR DE NEUMATICOS =================*/
+#buscador-neumaticos, #buscador-coches{
+	text-align: center;
+	width: 104.2%;
+	margin: 0 0 0 -2.1%;
+	padding: 10px 0 75px 0;
+}
+#buscador-neumaticos{
+	background-color: #394060;
+	/*border-top: solid 1px white;*/
+}
+#buscador-coches{
+	background-color: #4E598C;
+	/*border-top: solid 1px white;*/
+}
+#buscador-neumaticos h1, #buscador-coches h1{
+	color: white;
+	text-align: left;
+	margin-left: 15px;
+	margin-bottom: 6px;
+	font-size: 2em;
+}
+#buscador-neumaticos span, #buscador-coches span{
+	color: white;
+	font-size: 2em;
+}
+#buscador-neumaticos .inline, #buscador-coches .inline{
+	text-align: left;
+	display: inline-block;
+	min-width: 10%;
+	padding: 0 10px;
+	margin-top: 10px;
+}
+#buscador-neumaticos label, #buscador-coches label{
+	font-size: 1.3em;
+	color: white;
+}
+#buscador-neumaticos select, #buscador-coches select{
+	width: 100%;
+	padding: 10px;
+	line-height: 30px;
+	font-size: 1.3em;
+}
+#buscador-neumaticos #searchtyre, #buscador-coches #searchtyrecar
+{
+	background-color: #339900;
+	border: none;
+	color: white;
+	width: 10%;
+	padding: 16px 10px;
+	margin: 9px 0 0 10px;
+	font-size: 1.5em;
+}
+
+
+/*================ SMARTPHONES =================*/
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+
+#buscador-neumaticos h1, #buscador-coches h1{
+	font-size: 1.5em;
+}
+#buscador-neumaticos span{
+	display: none;
+}
+#buscador-neumaticos .inline, #buscador-coches .inline{
+	width: 98%;
+}
+#buscador-neumaticos label, #buscador-coches label{
+	font-size: 1.5em;
+}
+#buscador-neumaticos select, #buscador-coches select{
+	font-size: 1.5em;
+}
+#buscador-neumaticos #searchtyre, #buscador-coches #searchtyrecar
+{
+	margin-left: 0;
+	font-size: 1.5em;
+	
+}
+
+#buscador-neumaticos, #buscador-coches{
+	padding: 10px 0;
+}
+	
+}

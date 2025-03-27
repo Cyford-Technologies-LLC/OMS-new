@@ -1,0 +1,19 @@
+{{ include (templatePath ~ 'form_css.twig') }}
+
+{{ button }}
+{{ additionalButton }}
+
+{% if c( 'describe_price' ) %}
+<div id="adk-describe">* {{ __( 'Details' ) }}
+	<i class="fa fa-caret-down"></i>
+</div>
+<div id="adk-details"></div>
+{% endif %}
+
+{{ requireJs }}
+
+<div class='adk-stripe-overlay'>
+	<div class='adk-overlay-inner'>
+		{{  include (templatePath ~ 'form_inner.twig') }}
+	</div>
+</div>

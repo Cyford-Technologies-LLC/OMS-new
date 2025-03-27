@@ -1,0 +1,27 @@
+{{ requireJs  }}
+
+{{ include (templatePath ~ 'form_css.twig') }}
+
+{% if real_currency %}
+<div id="currency-notification" class="currency-notification">
+{{ real_currency }}
+</div>
+{% endif %}
+
+{{  include (templatePath ~ 'form_inner.twig') }}
+
+{% if popup %}
+<button
+	type="button"
+	class="btn btn-primary adk-show-popup adk-button {{ c( 'button_class' )|e( 'html_attr' ) }} adk-not-payment-api {{ popup ? 'popup' : '' }}"
+	id="button-confirm"
+	data-loading-text="Processing"
+	disabled="disabled"
+	style="{{ c( 'hide_button' ) ? 'display: none;' }}"
+>
+	{{ button_confirm }}
+</button>
+{% endif %}
+
+
+

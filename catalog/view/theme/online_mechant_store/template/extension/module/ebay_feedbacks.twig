@@ -1,0 +1,32 @@
+
+
+<link rel="stylesheet" href="catalog/view/theme/default/css/ebay_feedbacks.css">
+<script src="catalog/view/theme/default/js/ebay_feedbacks.js"></script>
+
+<div>
+  <h2>{{ HEADING_TITLE }}</h2>
+  <div id="div_feedbacks" class"animate-bottom">
+    <p>
+      <strong><span id="span_TotalNumberOfEntries">0</span> Feedbacks</strong>
+      (Page <span id="span_PageNumber">0</span> of <span id="span_TotalNumberOfPages">0</span>)
+    </p>            
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th style="width:2%;"></th>
+          <th style="width:58%;">Feedback</th>
+          <th style="width:20%;">Buyer</th>
+          <th style="width:20%;">When</th>
+        </tr>
+      </thead>
+      <tbody id="tblFeedback"></tbody>
+    </table>
+    <div id="div_pagination"></div>
+  </div>
+
+  <div id="div_loader"></div>
+</div>
+<script>
+getEbayFeedbacks("{{ HTTPS_SERVER }}", 1);
+</script>
+

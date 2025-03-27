@@ -1,0 +1,54 @@
+<div  class="payment-form adk-payment-form adk-not-payment-api" {{ formWrapperCss }} >
+	{{ image }}
+	<div class="adk-overflower" {{ contentCss }} >
+		<form action="" method="POST" id="payment-form" data-secret="{{ client_secret }}" {{ formCss }}>
+			<div class="adk-content sp-payment" id="payment">
+
+				{% set h = __( 'caption_form_caption' ) %}
+				{% if h %}
+					<div class="adk-row header adk-header" id="header">
+						<div>
+							<h3 class="sp-header">{{ h }}</h3>
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="adk-methods">
+
+					<div class="adk-methods-header-slider">
+						<div class="adk-methods-slider-inner">
+						{{ optionSliderLeft }}
+							<div class="adk-methods-header-wrapper">
+								<div class="adk-methods-header" {{ paymentOptionsHeaderCss }}>
+									{% for option in paymentOptions %}
+										{% if not hasRecurring or option.supportsRecurring() %}
+										{{ option.formHeader() }}
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+						{{ optionSliderRight }}
+						</div>
+					</div>
+
+					<div class="adk-methods-content">
+						<div class="adk-methods-slider">
+							<div class="adk-methods-slider-inner">
+								<div class="adk-methods-wrapper">
+									{% for option in paymentOptions %}
+										{% if not hasRecurring or option.supportsRecurring() %}
+											{{ option.formBody() }}
+										{% endif %}
+									{% endfor %}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="adk-methods-footer">
+				{{ confirmButton }}
+			</div>
+		</form>
+	</div>
+</div>

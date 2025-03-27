@@ -1,0 +1,160 @@
+{{ header }}
+<div class="container">
+
+	{% if error_warning %}
+	<div class="alert alert-danger">
+		<i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+		<button type="button" class="close" data-dismiss="alert">&times;</button>
+	</div>
+	{% endif %}
+
+	<div class="row">{{ column_left }}
+	
+	{% if column_left and column_right %}
+	{% set class = 'col-sm-6' %}
+	{% elseif column_left or column_right %}
+	{% set class = 'col-sm-9' %}
+	{% else %}
+	{% set class = 'col-sm-12' %}
+	{% endif %}
+
+	<div id="content" class="{{ class }}">{{ content_top }}
+		<h1>{{ description }}</h1>
+		<h3>{{ __( 'Due amount: ') }} {{ formatted_amount }}</h3>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{ catalog_url() }}catalog/view/theme/default/stylesheet/advertikon/advertikon.css"
+		>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{ catalog_url() }}catalog/view/theme/default/stylesheet/advertikon/stripe/form.css"
+		>
+
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="{{ catalog_url() }}catalog/view/theme/default/stylesheet/advertikon/animate.min.css"
+		>
+
+		<div class="customer-details">
+			{# <div class="customer-details-line">
+				<label for="invoice-name">{{ __( 'Name*' ) }}</label>
+				<input type="text" id="invoice-name" class="form-control invoice-required">
+			</div> #}
+
+			<div class="customer-details-line">
+				<label for="invoice-email">{{ __( 'Email*' ) }}</label>
+				<input type="email" id="invoice-email" class="form-control invoice-required">
+			</div>
+
+			<div class="customer-details-line">
+				<label for="invoice-telephone">{{ __( 'Telephone' ) }}</label>
+				<input type="tel" id="invoice-telephone" class="form-control">
+			</div>
+
+			<div class="customer-details-line">
+				<label for="invoice-country">{{ __( 'Country*' ) }}</label>
+				<input type="text" id="invoice-country" class="form-control invoice-required">
+			</div>
+
+			<div class="customer-details-line">
+				<label for="invoice-city">{{ __( 'City*' ) }}</label>
+				<input type="text" id="invoice-city" class="form-control">
+			</div>
+
+			<div class="customer-details-line">
+				<label for="invoice-line1">{{ __( 'Address line 1*' ) }}</label>
+				<input type="text" id="invoice-line1" class="form-control invoice-required">
+			</div>
+
+			<div class="customer-details-line">
+				<label for="invoice-line2">{{ __( 'Address line 2' ) }}</label>
+				<input type="text" id="invoice-line2" class="form-control">
+			</div>
+
+			<div class="customer-details-line">
+				<label for="invoice-zip">{{ __( 'Postal code*' ) }}</label>
+				<input type="text" id="invoice-zip" class="form-control invoice-required">
+			</div>
+
+		</div>
+
+<div class="invoice-form-wrapper" style="{{ form_max_width }}; margin: 20px auto;">
+{{ include( "default/template/#{a.type}/advertikon/stripe/form_inner.twig" ) }}
+</div>
+
+{% if popup %}
+<button
+	type="button"
+	class="btn btn-primary adk-show-popup adk-button {{ c( 'button_class' )|e( 'html_attr' ) }}"
+	id="button-confirm"
+	data-loading-text="Processing"
+	disabled="disabled"
+	style="{{ c( 'hide_button' ) ? 'display: none;' }}"
+>
+	{{ button_confirm }}
+</button>
+{% endif %}
+
+<script>
+window.ADK = { locale: {{ locale }} };
+window.ADK.preConfirmError = '{{ __( "Field is mandatory" ) }}'; // Default error message in case if preConfirm will return not TRUE and not a String
+window.ADK.preConfirm = function( paymentMethod ) {
+	var error = false;
+
+	if ( paymentMethod !== "card" ) {
+		return true;
+	}
+
+	$( ".customer-details .invoice-required" ).each( function() {
+		if ( this.value == "" ) {
+			ADK.pulsate( this, 5000 );
+			error = true;
+		}
+	} );
+
+	if ( $( "#cc-name" ).val() == "" ) { // cardholder's name at payment form
+		ADK.pulsate( $( "#cc-name" ), 5000 );
+		error = true;
+	}
+
+	if ( error ) {
+		return '{{ __( "Field is mandatory" ) }}'; // message to display in the error pop-up
+	}
+
+	ADK.locale.name      = $( "#invoice-name" ).val();
+	ADK.locale.telephone = $( "#invoice-telephone" ).val();
+	ADK.locale.email     = $( "#invoice-email" ).val();
+	ADK.locale.country   = $( "#invoice-country" ).val();
+	ADK.locale.city      = $( "#invoice-city" ).val();
+	ADK.locale.line1     = $( "#invoice-line1" ).val();
+	ADK.locale.line2     = $( "#invoice-line2" ).val();
+	ADK.locale.zipCode   = $( "#invoice-zip" ).val();
+
+	// next - catalog/view/javascript/advertikon/stripe/form-old.js::confirm
+
+	return true; // to start charging
+}
+
+$( document ).ready( function() {
+	ADK.e.subscribe( "stripe.loaded", function() {
+		if ( "{{ secret }}" && "{{ source }}" ) {
+			ADK.checkSourceIfPay( "{{ source }}", "{{ secret }}" );
+		}
+	} );
+	
+} );
+</script>
+
+{{ script_url }}
+
+		{{ content_bottom }}
+		</div>
+    {{ column_right }}
+	</div>
+</div>
+{{ footer }}
+
+

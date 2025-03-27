@@ -1,0 +1,300 @@
+<style type="text/css">
+    .chat-content-text.seller_chat_box {
+      border: 1px solid {% if (wk_mpchat_seller_chat_color is defined) %} {{ wk_mpchat_seller_chat_color }}{% else %} {{ "#e1e1e1" }}{% endif %};
+      box-shadow: 0 0 1px 1px {% if (wk_mpchat_seller_chat_color is defined) %} {{ wk_mpchat_seller_chat_color }}{% else %} {{ "#e1e1e1" }}{% endif %};
+      color: {% if (wk_mpchat_seller_name_color is defined) %} {{ wk_mpchat_seller_name_color }}{% else %} {{ "#272727" }}{% endif %};
+      background-color: {% if (wk_mpchat_seller_chat_color is defined) %} {{ wk_mpchat_seller_chat_color }}{% else %} {{ "#FFF" }}{% endif %};
+    }
+    .chat-content-admin {
+      color: {% if (wk_mpchat_seller_name_color is defined) %} {{ wk_mpchat_seller_name_color }}{% else %} {{ "#272727" }}{% endif %};
+    }
+    .chat-hidden{
+        background-color: {% if (wk_mpchat_chat_box_bg_color is defined) %} {{ wk_mpchat_chat_box_bg_color }}{% else %} {{ "#FFF" }}{% endif %};
+    }
+    .seller_notifier{
+        border-color: transparent transparent {% if (wk_mpchat_seller_chat_color is defined) %} {{ wk_mpchat_seller_chat_color }}{% else %} {{ "#e1e1e1" }}{% endif %};
+    }
+    .chat-content-text.customer_chat_box {
+      border: 1px solid {% if (wk_mpchat_customer_chat_color is defined) %} {{ wk_mpchat_customer_chat_color }}{% else %} {{ "#e1e1e1" }}{% endif %};
+      box-shadow: 0 0 1px 1px {% if (wk_mpchat_customer_chat_color is defined) %} {{ wk_mpchat_customer_chat_color }}{% else %} {{ "#e1e1e1" }}{% endif %};
+      color: {% if (wk_mpchat_customer_name_color is defined) %} {{ wk_mpchat_customer_name_color }}{% else %} {{ "#272727" }}{% endif %};
+      background-color: {% if (wk_mpchat_customer_chat_color is defined) %} {{ wk_mpchat_customer_chat_color }}{% else %} {{ "#FFF" }}{% endif %};
+    }
+    .chat-content-user {
+      color: {% if (wk_mpchat_customer_name_color is defined) %} {{ wk_mpchat_customer_name_color }}{% else %} {{ "#272727" }}{% endif %};
+    }
+    .customer_notifier{
+        border-color: transparent transparent {% if (wk_mpchat_customer_chat_color is defined) %} {{ wk_mpchat_customer_chat_color }}{% else %} {{ "#e1e1e1" }}{% endif %};
+    }
+</style>
+
+{% if (p_result is defined) %}
+<form method="post" id="form-chat">
+    <input type="hidden" class="getdata">
+    <span class="close"></span>
+	<div class="chat-box" onclick="chatApp.colorchange();">
+        <input type="hidden" class="start_val" value="A">
+        <input type="hidden" class="lastid" value="R">
+        <input type="hidden" class="sid" value="{{ p_result['customer_id'] }}">
+		<div class="chat-heading" >
+            <span class="chat-circle-disable" style="float:left;"><i class="fa fa-circle"></i></span>
+            <div class="seller-name">&nbsp;&nbsp;{{ p_result['companyname'] }}</div>
+            <div id="close-chat"><i class="fa fa-times"></i></div>
+            <div id="chat_large"><span class="chat-large"></span></div><div id="chat"><span class="chat-on"></span></div>
+        </div>
+		<div class="chat-hidden">
+			<div class="chat-content" id="chat_content">
+			</div>
+      <div class="chat-loader" id="chat-loader"></div>
+      <div id="chat-loader-fill"> </div>
+          <div class="chat_entry_block" id="chat_entry_block" style="display:none;">
+		        <div class="chat_entry_textarea">
+                    <textarea class="chat-text" name="chat-text"></textarea>
+                </div>
+                <div class="chat_emoticons_list">
+                  <div class="chat_emoticon fontelico-emo-happy"></div>
+                  <div class="chat_emoticon fontelico-emo-wink" title="fontespanco-emo-wink"></div>
+                  <div class="chat_emoticon fontelico-emo-wink2" title="fontespanco-emo-wink2"></div>
+                  <div class="chat_emoticon fontelico-emo-unhappy" title="fontespanco-emo-unhappy"></div>
+                  <div class="chat_emoticon fontelico-emo-sleep" title="fontespanco-emo-sleep"></div>
+                  <div class="chat_emoticon fontelico-emo-thumbsup" title="fontespanco-emo-thumbsup"></div>
+                  <div class="chat_emoticon fontelico-emo-devil" title="fontespanco-emo-devil"></div>
+                  <div class="chat_emoticon fontelico-emo-surprised" title="fontespanco-emo-surprised"></div>
+                  <div class="chat_emoticon fontelico-emo-tongue" title="fontespanco-emo-tongue"></div>
+                  <div class="chat_emoticon fontelico-emo-coffee" title="fontespanco-emo-coffee"></div>
+                  <div class="chat_emoticon fontelico-emo-sunglasses" title="fontespanco-emo-sunglasses"></div>
+                  <div class="chat_emoticon fontelico-emo-displeased" title="fontespanco-emo-displeased"></div>
+                  <div class="chat_emoticon fontelico-emo-beer" title="fontespanco-emo-beer"></div>
+                  <div class="chat_emoticon fontelico-emo-grin" title="fontelico-emo-grin"></div>
+                  <div class="chat_emoticon fontelico-emo-angry" title="fontelico-emo-angry"></div>
+                  <div class="chat_emoticon fontelico-emo-saint" title="fontelico-emo-saint"></div>
+                  <div class="chat_emoticon fontelico-emo-cry" title="fontelico-emo-cry"></div>
+                  <div class="chat_emoticon fontelico-emo-shoot" title="fontelico-emo-shoot"></div>
+                  <div class="chat_emoticon fontelico-emo-squint" title="fontelico-emo-squint"></div>
+                  <div class="chat_emoticon fontelico-emo-laugh" title="fontelico-emo-laugh"></div>
+                </div>
+                <div class="emoticon_notifier">
+                </div>
+                <a onclick="chat_emoticons_fn(event)" href="" id="chat-anchor">
+                <div class="chat_emoticons" id="chat_emoticons">
+                    <span class="example_emoticon fontelico-emo-happy"></span>
+                </div>
+                </a>
+            </div>
+		</div>
+	</div>
+</form>
+<span class="online" style="background-color:{% if (wk_mpchat_color_online is defined) %} {{ wk_mpchat_color_online }}{% else %} {{ "#272727" }}{% endif %}"></span>
+<span class="offline" style="background-color:{% if (wk_mpchat_color_offline is defined) %} {{ wk_mpchat_color_offline }}{% else %} {{ "#EEE" }}{% endif %}"></span>
+<span class="incoming" style="background-color:{% if (wk_mpchat_color_incoming is defined) %} {{ wk_mpchat_color_incoming }}{% else %} {{ "#0A0" }}{% endif %}"></span>
+
+<div class="modal fade" id="chatModalWebkul">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">x</button>
+      </div>
+      <div class="modal-body">
+        <h4 class="text-danger">{{ login_text }}
+        </h4>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<script>
+"use strict";
+let seller_offline    = '{{ seller_text }}';
+let customerId        = '{{ customer_id }}';
+let alive             = 0;
+let onlinecolor       = $('.online').css('background-color');
+let offlinecolor      = $('.offline').css('background-color');
+let incomingcolor     = $('.incoming').css('background-color');
+let sid               = "{{ p_result['customer_id'] }}";
+
+if(customerId.length < 1){
+  $('#close-chat').hide();
+}
+
+$(document).ready(function() {
+  let date = new Date();
+  $.ajax({
+    url:'index.php?route=extension/module/wk_mpchat/setTimeDifference',
+    data:'&wk_time_difference='+date.getTimezoneOffset(),
+    type:'post',
+  });
+  $('.chat-heading').css('background-color',offlinecolor);
+});
+
+$('#close-chat').on('click',function(event){
+  event.stopPropagation();
+  let confirmation = confirm("You are about to go offline. Are you sure?");
+  if(confirmation){
+    $.ajax({
+      url:'index.php?route=extension/module/wk_mpchat/deleteMessages',
+      data:'&customer_id={% if (seller_id is defined and seller_id) %} {{ seller_id }}{% endif %}&customer=1',
+      type:'post',
+      success:function(data){
+        let msgType = data.split(':');
+        if(msgType[0] == 'warning'){
+        } else {
+          if($('#chat').children('span').attr('class') == 'chat-off'){
+            $('#chat').children('span').trigger('click');
+          }
+          alive = 1;
+        }
+
+      }
+    });
+  }
+});
+
+$(document).on('.chat_emoticon', 'click', function(){
+    let html = $('.chat-text').html();
+    let emoticon = $(this).attr('class').split(' ').pop();
+    html += ' <div class="chat_emoticon ' + emoticon + '"></div>';
+    chatApp.chatenter(html);
+    $('.chat_emoticons_list').css('display','none');
+    $('.emoticon_notifier').css('display','none');
+});
+
+function chat_emoticons_fn(event) {
+  event.preventDefault();
+  if(!aid) {
+      return;
+  }
+  let view = $('.chat_emoticons_list').css('display');
+  if(view == 'none'){
+      $('.chat_emoticons_list').css('display','block');
+      $('.emoticon_notifier').css('display','block');
+  }else{
+      $('.chat_emoticons_list').css('display','none');
+      $('.emoticon_notifier').css('display','none');
+  }
+}
+
+$(document).on('focus', '#chat-anchor', function(event) {
+  event.preventDefault();
+  $('#chat_emoticons').css('border', '1px solid');
+});
+
+
+$(document).on('blur', '#chat-anchor', function(event) {
+  event.preventDefault();
+  $('#chat_emoticons').css('border', '0px');
+});
+
+$(document).on("keypress", function(event) {
+    if(event.ctrlKey) {
+        if(event.which === 101){
+            view = $('.chat_emoticons_list').css('display');
+            if(view == 'none'){
+                $('.chat_emoticons_list').css('display','block');
+                $('.emoticon_notifier').css('display','block');
+            }else{
+                $('.chat_emoticons_list').css('display','none');
+                $('.emoticon_notifier').css('display','none');
+            }
+        }
+    }
+});
+
+$('.chat-content').scroll(function (e) {
+    let scrollheight = $(this).scrollTop();
+    if(scrollheight==0) {
+      chatApp.chats(sid);
+    }
+});
+
+$('.chaton_a').click(function(){
+  $('.'+$('#chat').find('span').attr('class')).trigger('click');
+})
+
+$('.close').click(function(){
+  $('body').find('.login').remove();
+  $('.close').css('display','none');
+})
+
+$('.chat-text').on('focus', function(event) {
+  $('.chat_emoticons_list').css('display','none');
+  $('.emoticon_notifier').css('display','none');
+});
+
+$('.chat-text').on('keydown', function(event) {
+  let chat_text = $(this).val();
+  if (event.keyCode == 13 && !event.shiftKey) {
+        event.preventDefault();
+        $(this).val('');
+        if($.trim(chat_text)!=''){
+            chatApp.chatenter(chat_text);
+        }
+    }
+});
+
+$('.chat-heading').click(function(event){
+  $('.chat-on').trigger('click');
+});
+
+$('.chat-on, .chat-off').click(function(event){
+  event.stopPropagation();
+
+    if(alive == 1){
+      chatApp.alive_again();
+    } else {
+
+    }
+
+    if(customerId.length<1) {
+        $('#chatModalWebkul').modal()
+    } else if($(this).attr('class')=='chat-off'){
+        $('#chat_large > span').removeClass('chat-small').addClass('chat-large');
+        $('.chat-content').removeClass('chat_hidden_large');
+        $('.chat-hidden').css('display','none');
+        $(this).attr('class','chat-on');
+        $('.emoticon_notifier').css({'left':'214px','top':'209px'});
+    }else if(firstopen==true){
+        $('.chat-hidden').css('display','block');
+        $(this).attr('class','chat-off');
+        chatApp.chats(sid);
+        firstopen = false;
+    }else{
+        $('.chat-hidden').css('display','block');
+        $(this).attr('class','chat-off');
+    }
+})
+
+
+$('.chat-large, .chat-small').click(function(){
+
+    if(alive == 1){
+      chatApp.alive_again();
+    }
+
+    if(customerId.length<1){
+        $('#chatModalWebkul').modal()
+    }else if($(this).attr('class')=='chat-small'){
+
+        $('.chat-content').removeClass('chat_hidden_large');
+        $(this).attr('class','chat-large');
+        $('.emoticon_notifier').css({'left':'214px','top':'209px'});
+    }else if(firstopen==true){
+        $('#chat > span').removeClass('chat-on').addClass('chat-off');
+        $('.chat-hidden').css('display','block');
+        $('.emoticon_notifier').css({'left':'315px','top':'315px'});
+        $('.chat-content').addClass('chat_hidden_large');
+        $(this).attr('class','chat-small');
+        chatApp.chats(sid);
+        firstopen = false;
+    }else{
+        $('#chat > span').removeClass('chat-on').addClass('chat-off');
+        $('.emoticon_notifier').css({'left':'315px','top':'315px'});
+        $('.chat-hidden').css('display','block');
+        $('.chat-content').addClass('chat_hidden_large');
+        $(this).attr('class','chat-small');
+    }
+})
+timeradmin = setInterval(function(){
+  chatApp.admin(sid);
+}, delay);
+</script>
+{% endif %}

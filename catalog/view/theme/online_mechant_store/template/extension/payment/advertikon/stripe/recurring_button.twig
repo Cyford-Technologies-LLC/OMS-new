@@ -1,0 +1,15 @@
+<style>
+	#adk-recurring-buttons {
+		text-align: right;
+		margin-bottom: 10px;
+	}
+
+</style>
+<div id="adk-recurring-buttons">
+	{% if can_cancel %}
+		{{ cancel_now_button }}
+		{{ cancel_button }}
+	{% endif %}
+	{{ refresh_button }}
+</div>
+{{ requireJs }}

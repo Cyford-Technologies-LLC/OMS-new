@@ -1,0 +1,64 @@
+<link href="catalog/view/theme/default/stylesheet/tyre.css" rel="stylesheet">
+<h3>{{ heading_title }}</h3>
+<div id="buscador-coches" >
+	<div class="inline">
+		<label for="car">{{ text_car }}</label>
+		<br>
+		<select name="car" id="car" data-inline="true">
+			<option value="">{{ text_select_car }}</option>
+			{% for car in cars %}
+			    <option value="{{ car.car_id }}">{{ car.name }}</option>
+			{% endfor %}
+		</select>
+	</div>
+	<div class="inline">
+		<label for="model">{{ text_model }}</label>
+		<br>
+		<select name="model" id="model" style="width: 9.6em;"></select>
+	</div>
+	<div class="inline">
+		<label for="year">{{ text_year }}</label>
+		<br>
+		<select name="year" id="year" style="width: 9.6em;"></select>
+	</div>
+	<div class="inline">
+		<label for="version">{{ text_version }}</label>
+		<br>
+		<select name="version" id="version" style="width: 9.6em;"></select>
+	</div>
+	<div class="inline">
+		<a onclick="contentSearchCar();" class="btn btn-primary btn-lg btn-block">{{ button_search }}</a>
+	</div>
+</div>
+<script language="JavaScript" type="text/JavaScript"><!--
+    $(document).ready(function(){
+        $("#car").change(function(event){
+            var id = $("#car").find(':selected').val();
+			$("#model").after("<img src='{{ HTTP_SERVER }}image/data/ajax-loader.gif' id='imagetmp' alt='loading' />").fadeIn();
+			$("#model").load("{{ HTTP_SERVER }}index.php?route=extension/module/searchtyrecar/damemodelo&id="+id);
+			$('#imagetmp').delay(1000).hide(1);
+			$('#version').attr('disabled', 'disabled');
+			$('#version').val('');
+			$('#year').attr('disabled', 'disabled');
+			$('#year').val('');
+        });
+		$("#model").change(function(event){
+			var id = $("#car").find(':selected').val();
+            var id_model = $("#model").find(':selected').val();
+			$('#year').removeAttr('disabled');
+			$('#version').attr('disabled', 'disabled');
+			$("#year").after("<img src='{{ HTTP_SERVER }}image/data/ajax-loader.gif' id='imagetmp1' alt='loading' />").fadeIn();
+			$("#year").load("{{ HTTP_SERVER }}index.php?route=extension/module/searchtyrecar/dameyear&id="+id+"&model="+encodeURIComponent(id_model));
+			$('#imagetmp1').delay(1000).hide(1);
+		});
+		$("#year").change(function(event){
+			var id = $("#car").find(':selected').val();
+            var id_model = $("#model").find(':selected').val();
+			var id_year = $("#year").find(':selected').val();
+			$('#version').removeAttr('disabled');
+			$("#version").after("<img src='{{ HTTP_SERVER }}image/data/ajax-loader.gif' id='imagetmp2' alt='loading' />").fadeIn();
+			$("#version").load("{{ HTTP_SERVER }}index.php?route=extension/module/searchtyrecar/dameversion&id="+id+"&model="+encodeURIComponent(id_model)+"&year="+ encodeURIComponent(id_year));
+			$('#imagetmp2').delay(1000).hide(1);
+        });
+    });
+//--></script>

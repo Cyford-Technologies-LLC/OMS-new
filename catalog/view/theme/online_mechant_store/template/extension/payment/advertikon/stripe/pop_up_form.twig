@@ -1,0 +1,17 @@
+{{ requireJs  }}
+
+{{ include (templatePath ~ 'form_css.twig') }}
+
+{% if real_currency %}
+    <div id="currency-notification" class="currency-notification">
+        {{ real_currency }}
+    </div>
+{% endif %}
+
+{{ additionalButton }}
+
+<div class='adk-stripe-overlay'>
+    <div class='adk-overlay-inner'>
+        {{  include (templatePath ~ 'form_inner.twig') }}
+    </div>
+</div>
